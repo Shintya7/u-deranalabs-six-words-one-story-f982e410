@@ -9,20 +9,25 @@ const STORY = "She planted his letters. Roses bloomed.";
 
 const OUTPUT_PATH = process.env.ENTRY_OUTPUT || "/output/entry.txt";
 
-const WORD_COUNT = STORY.trim().split(/\s+/).filter(Boolean).length;
-if (WORD_COUNT !== 6) {
-  throw new Error(`Story must be exactly 6 words, got ${WORD_COUNT}.`);
+// The turn: letters planted in grief become roses — loss turned into growth.
+function validateStory(story: string): void {
+  const wordCount = story.trim().split(/\s+/).filter(Boolean).length;
+  if (wordCount !== 6) {
+    throw new Error(`Story must be exactly 6 words, got ${wordCount}.`);
+  }
+
+  if (story.length < 1 || story.length > 60) {
+    throw new Error(
+      `Story must be 1-60 characters, got ${story.length}.`
+    );
+  }
+
+  if (story.trim().length === 0) {
+    throw new Error("Story must not be only whitespace.");
+  }
 }
 
-if (STORY.length < 1 || STORY.length > 60) {
-  throw new Error(
-    `Story must be 1-60 characters, got ${STORY.length}.`
-  );
-}
-
-if (STORY.trim().length === 0) {
-  throw new Error("Story must not be only whitespace.");
-}
+validateStory(STORY);
 
 mkdirSync(dirname(OUTPUT_PATH), { recursive: true });
 writeFileSync(OUTPUT_PATH, STORY, "utf8");
